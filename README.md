@@ -1,6 +1,6 @@
 # Analysis for Atlanta Prevention Packages Manuscript
 
-This repo is made up of scripts used for analysis in a particular manuscript for the Marshall Research Group. This manuscript is an investigation on how different interventions and prevention efforts can work in tandem to mitigate the spread of HIV in Atlanta, Georgia. We are about to enter the analysis stage of this project. Scripts to come.
+This repo is made up of scripts used for analysis in a particular manuscript for the Marshall Research Group. This manuscript is an investigation on how different interventions and prevention efforts can work in tandem to mitigate the spread of HIV in Atlanta, Georgia.
 
 # Usage
 
