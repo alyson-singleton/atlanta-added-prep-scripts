@@ -91,7 +91,10 @@ SUMMARY_BY_RUN_SENSITIVITY$INCIDENCE_RATE<-SUMMARY_BY_RUN_SENSITIVITY$WHITE_RATE
 
 SUMMARY_BY_RUN_SENSITIVITY$RUN_TYPE[SUMMARY_BY_RUN_SENSITIVITY$BLACK_ADHERENCE.x=="Main"]<-"Main Analysis"
 SUMMARY_BY_RUN_SENSITIVITY$RUN_TYPE[SUMMARY_BY_RUN_SENSITIVITY$BLACK_ADHERENCE.x=="Sens"]<-"Sensitivity Analysis"
-SUMMARY_BY_RUN_SENSITIVITY$ART_COVERAGE.x <- factor(SUMMARY_BY_RUN_SENSITIVITY$ART_COVERAGE.x , levels=c("Bas", "90W", "95W", "90A", "95A"))
+SUMMARY_BY_RUN_SENSITIVITY$ART_COVERAGE.x <- factor(SUMMARY_BY_RUN_SENSITIVITY$ART_COVERAGE.x , levels=c("Bas", "90W", "95W", "90A", "95A", "100"))
+SUMMARY_BY_RUN_SENSITIVITY<-SUMMARY_BY_RUN_SENSITIVITY[!(SUMMARY_BY_RUN_SENSITIVITY$ART_COVERAGE.x=="90W"),]
+SUMMARY_BY_RUN_SENSITIVITY<-SUMMARY_BY_RUN_SENSITIVITY[!(SUMMARY_BY_RUN_SENSITIVITY$ART_COVERAGE.x=="95W"),]
+SUMMARY_BY_RUN_SENSITIVITY<-SUMMARY_BY_RUN_SENSITIVITY[!(SUMMARY_BY_RUN_SENSITIVITY$ART_COVERAGE.x=="100"),]
 
 ## SUBSET TO SET 1: VARY ADHERENCE ONLY
 HIGH_PREP_SCENARIOS<-SUMMARY_BY_RUN_SENSITIVITY[SUMMARY_BY_RUN_SENSITIVITY$PREP_COVERAGE.x==0.90,]
@@ -160,6 +163,7 @@ p1c<-ggplot() +
   #scale_y_continuous(labels = percent, limits = c(-0.75, 0.5)) + 
   scale_fill_manual(name = "Analysis Type", labels = c("'As Observed' Disparities in Adherence", "No Disparities in Adherence"), values = c("#1ECFD6", "#EDD170")) +
   labs(x = "", y = "HIV incidence (per 100 person-years)", title = "Black/African American MSM (15% PrEP Use)") +
+  scale_x_discrete(labels=c("Bas" = "Current", "90A" = "90-90-90", "95A" = "95-95-95")) + 
   geom_hline(yintercept = 0, linetype = "dashed") +
   theme(legend.position = "",
         legend.title = element_text(hjust = 0.5, face = "bold", size = 14),
@@ -181,6 +185,7 @@ p1d<-ggplot() +
   #scale_y_continuous(labels = percent, limits = c(-1, 0.5)) + 
   scale_fill_manual(name = "Analysis Type", labels = c("'As Observed' Disparities in PrEP Adherence", "No Disparities in PrEP Adherence"), values = c("#1ECFD6", "#EDD170")) +
   labs(x = "Treatment Scenario", y = "HIV incidence (per 100 person-years)", title = "Black/African American MSM (90% PrEP Use)") +
+  scale_x_discrete(labels=c("Bas" = "Current", "90A" = "90-90-90", "95A" = "95-95-95")) + 
   geom_hline(yintercept = 0, linetype = "dashed") +
   theme(legend.position = "bottom",
         legend.title = element_text(hjust = 0.5, face = "bold", size = 14),
@@ -208,6 +213,7 @@ p1e<-ggplot() +
   #scale_y_continuous(labels = percent, limits = c(-0.75, 0.5)) + 
   scale_fill_manual(name = "Analysis Type", labels = c("'As Observed' Disparities in Adherence", "No Disparities in Adherence"), values = c("#1ECFD6", "#EDD170")) +
   labs(x = "", y = "", title = "White MSM (15% PrEP Use)") +
+  scale_x_discrete(labels=c("Bas" = "Current", "90A" = "90-90-90", "95A" = "95-95-95")) + 
   geom_hline(yintercept = 0, linetype = "dashed") +
   theme(legend.position = "",
         legend.title = element_text(hjust = 0.5, face = "bold", size = 14),
@@ -229,6 +235,7 @@ p1f<-ggplot() +
   #scale_y_continuous(labels = percent, limits = c(-1, 0.5)) + 
   scale_fill_manual(name = "Analysis Type", labels = c("'As Observed' Disparities in Adherence", "No Disparities in Adherence"), values = c("#1ECFD6", "#EDD170")) +
   labs(x = "Treatment Scenario", y = "", title = "White MSM (90% PrEP Use)") +
+  scale_x_discrete(labels=c("Bas" = "Current", "90A" = "90-90-90", "95A" = "95-95-95")) + 
   geom_hline(yintercept = 0, linetype = "dashed") +
   theme(legend.position = "bottom",
         legend.title = element_text(hjust = 0.5, face = "bold", size = 14),

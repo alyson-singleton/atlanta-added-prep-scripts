@@ -265,19 +265,21 @@ MAIN_RESULTS_SUMMARY_WITHIN<-SUMMARY_BY_RUN_MAIN_WITHIN %>%
 
 ## Data Visualization: Create Manuscript Figures
 
-## Figure 1: Boxplots showing overall and race-specific incidence rates on y-axis with 
+## Figure 2: Boxplots showing overall and race-specific incidence rates on y-axis with 
 # treatment scenarios (baseline, 90W, 95W, 90A, 95A) along x-axis (3 panels with common legend)
 
 # Create data frame with only PrEP @ 0% runs and no 100
 SUMMARY_BY_RUN_MAIN_0PrEP<-SUMMARY_BY_RUN_MAIN[(SUMMARY_BY_RUN_MAIN$PREP_COVERAGE.x=="0.00"),]
+SUMMARY_BY_RUN_MAIN_0PrEP<-SUMMARY_BY_RUN_MAIN_0PrEP[!(SUMMARY_BY_RUN_MAIN_0PrEP$ART_COVERAGE.x=="90W"),]
+SUMMARY_BY_RUN_MAIN_0PrEP<-SUMMARY_BY_RUN_MAIN_0PrEP[!(SUMMARY_BY_RUN_MAIN_0PrEP$ART_COVERAGE.x=="95W"),]
 SUMMARY_BY_RUN_MAIN_0PrEP<-SUMMARY_BY_RUN_MAIN_0PrEP[!(SUMMARY_BY_RUN_MAIN_0PrEP$ART_COVERAGE.x=="100"),]
-SUMMARY_BY_RUN_MAIN_0PrEP$ART_COVERAGE.x <- ifelse(SUMMARY_BY_RUN_MAIN_0PrEP$ART_COVERAGE.x=="Bas", "1", SUMMARY_BY_RUN_MAIN_0PrEP$ART_COVERAGE.x)
+#SUMMARY_BY_RUN_MAIN_0PrEP$ART_COVERAGE.x <- ifelse(SUMMARY_BY_RUN_MAIN_0PrEP$ART_COVERAGE.x=="Bas", "1", SUMMARY_BY_RUN_MAIN_0PrEP$ART_COVERAGE.x)
 
 # Plot for black msm absolute incidence rate
 f1.1<-ggplot() +
-  geom_boxplot(data = SUMMARY_BY_RUN_MAIN_0PrEP, aes(x = ART_COVERAGE.x, y = BLACK_RATE, fill=ART_COVERAGE.x), color = "black", size=0.6) +
+  geom_boxplot(data = SUMMARY_BY_RUN_MAIN_0PrEP, aes(x = ART_COVERAGE.x, y = BLACK_RATE), color = "black", fill="lightgrey", size=0.6) +
   scale_y_continuous(limits = c(1, 6.5)) + 
-  scale_fill_manual(name = "Treatment Scenario", guide = guide_legend(), labels = c("        1. Current Levels        ", "2. 90-90-90 (White MSM Only)", "3. 95-95-95 (White MSM Only)", "    4. 90-90-90 (All MSM)    ", "    5. 95-95-95 (All MSM)"    ), values = c("#C05640", "#003D73", "#0878A4", "#1ECFD6", "#EDD170")) +
+  scale_x_discrete(name = "Treatment Scenario", labels = c("Current", "90-90-90", "95-95-95")) +
   labs(x = "Treatment Scenario", y = "", title="Black/African American MSM") +
   guides(fill = guide_legend(label.position = "bottom")) +
   #geom_hline(yintercept = 0, linetype = "dashed") +
@@ -293,14 +295,14 @@ f1.1<-ggplot() +
         axis.ticks = element_blank(),
         axis.line = element_line(color = "black"),
         axis.title = element_text(size = 16, colour = "black", face = "bold"),
-        axis.text = element_text(size = 16, colour = "black"),
+        axis.text = element_text(size = 15, colour = "black"),
         plot.title = element_text(size = 18, colour = "black", face = "bold", hjust=0.5, vjust = 0.8))
 
 # Plot for white msm absolute incidence rate
 f1.2<-ggplot() +
-  geom_boxplot(data = SUMMARY_BY_RUN_MAIN_0PrEP, aes(x = ART_COVERAGE.x, y = WHITE_RATE, fill=ART_COVERAGE.x), color = "black", size=0.6) +
+  geom_boxplot(data = SUMMARY_BY_RUN_MAIN_0PrEP, aes(x = ART_COVERAGE.x, y = WHITE_RATE), color = "black", fill="lightgrey", size=0.6) +
   scale_y_continuous(limits = c(1, 6.5)) + 
-  scale_fill_manual(name = "Treatment Scenario", labels = c("Baseline", "90-90-90 White", "95-95-95 White", "90-90-90 All", "95-95-95 All"), values = c("#C05640", "#003D73", "#0878A4", "#1ECFD6", "#EDD170")) +
+  scale_x_discrete(name = "", labels = c("Current", "90-90-90", "95-95-95")) +
   labs(x = "", y = "", title="White MSM") +
   #geom_hline(yintercept = 0, linetype = "dashed") +
   theme(legend.position = "none",
@@ -315,14 +317,14 @@ f1.2<-ggplot() +
         axis.ticks = element_blank(),
         axis.line = element_line(color = "black"),
         axis.title = element_text(size = 16, colour = "black", face = "bold"),
-        axis.text = element_text(size = 16, colour = "black"),
+        axis.text = element_text(size = 15, colour = "black"),
         plot.title = element_text(size = 18, colour = "black", face = "bold", hjust=0.5, vjust = 0.8))
 # Plot for overall msm absolute incidence rate
 f1.3<-ggplot() +
-  geom_boxplot(data = SUMMARY_BY_RUN_MAIN_0PrEP, aes(x = ART_COVERAGE.x, y = INCIDENCE_RATE, fill=ART_COVERAGE.x), color = "black", size=0.6) +
+  geom_boxplot(data = SUMMARY_BY_RUN_MAIN_0PrEP, aes(x = ART_COVERAGE.x, y = INCIDENCE_RATE), color = "black", fill="lightgrey", size=0.6) +
   scale_y_continuous(limits = c(1, 6.5)) + 
-  scale_fill_manual(name = "Treatment Scenario", labels = c("Baseline", "90-90-90 White", "95-95-95 White", "90-90-90 All", "95-95-95 All"), values = c("#C05640", "#003D73", "#0878A4", "#1ECFD6", "#EDD170")) +
-  labs(x = "", y = "HIV incidence (per 100 person-years)", title="Overall Population") +
+  scale_x_discrete(name = "", labels = c("Current", "90-90-90", "95-95-95")) +
+  labs(x = "", y = "HIV incidence (per 100 person-years)", title="All MSM") +
   #geom_hline(yintercept = 0, linetype = "dashed") +
   theme(legend.position = "none",
         legend.title = element_text(hjust = 0.5, face = "bold", size = 14),
@@ -336,32 +338,34 @@ f1.3<-ggplot() +
         axis.ticks = element_blank(),
         axis.line = element_line(color = "black"),
         axis.title = element_text(size = 16, colour = "black", face = "bold"),
-        axis.text = element_text(size = 16, colour = "black"),
+        axis.text = element_text(size = 15, colour = "black"),
         plot.title = element_text(size = 18, colour = "black", face = "bold", hjust=0.5, vjust = 0.8))
 
 # Plot all three together with a common legend
-legend <- get_legend(f1.1)
-f1.1 <- f1.1 + theme(legend.position="none")
+#legend <- get_legend(f1.1)
+#f1.1 <- f1.1 + theme(legend.position="none")
 grid.arrange(arrangeGrob(f1.3, left = textGrob("A)", x = unit(1, "npc"), 
                                                y = unit(.95, "npc"),gp=gpar(fontsize=20))), 
              arrangeGrob(f1.1, left = textGrob("B)", x = unit(1, "npc"), 
                                                y = unit(.95, "npc"),gp=gpar(fontsize=20))),
              arrangeGrob(f1.2, left = textGrob("C)", x = unit(1, "npc"), 
                                                y = unit(.95, "npc"),gp=gpar(fontsize=20))),
-             legend, ncol=3, nrow=2,
-             layout_matrix = rbind(c(1,2,3), c(4,4,4)),
-             widths = c(2.7, 2.7, 2.7), heights = c(2.5, 0.2))
+             ncol=3, nrow=1,
+             layout_matrix = rbind(c(1,2,3)),
+             widths = c(2.7, 2.7, 2.7))
 
 
 ## _________________________________________________________________________________________________________________________________________________
 
-## Figure 2: Heatmaps showing changes in overall and race-specific incidence rates 
+## Figure 3: Heatmaps showing changes in overall and race-specific incidence rates 
 # (relative to 0% PrEP in a given treatment scenario, i.e., 0% PrEP = 0) (3 panels, 
 # not necessarily common legend if the scales of changes are really different but try 
 # to match colors across scales)
 
 # Create data frame with no PrEP @ 0% runs and no 100
 MAIN_RESULTS_SUMMARY_WITHIN_REDUCED <- MAIN_RESULTS_SUMMARY_WITHIN[!(MAIN_RESULTS_SUMMARY_WITHIN$PREP_COVERAGE.x=="0.00"),]
+MAIN_RESULTS_SUMMARY_WITHIN_REDUCED<-MAIN_RESULTS_SUMMARY_WITHIN_REDUCED[!(MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$ART_COVERAGE.x=="90W"),]
+MAIN_RESULTS_SUMMARY_WITHIN_REDUCED<-MAIN_RESULTS_SUMMARY_WITHIN_REDUCED[!(MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$ART_COVERAGE.x=="95W"),]
 MAIN_RESULTS_SUMMARY_WITHIN_REDUCED<-MAIN_RESULTS_SUMMARY_WITHIN_REDUCED[!(MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$ART_COVERAGE.x=="100"),]
 MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$ART_COVERAGE.x <- ifelse(MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$ART_COVERAGE.x=="Bas", "1", MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$ART_COVERAGE.x)
 MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x <- ifelse(MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x=="0.15", "15%", MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x)
@@ -377,7 +381,7 @@ f2.1 <- ggplot() +
   scale_fill_gradient2(name = "Absolute Change in HIV Incidence\n(per 100 person-years)",
                        limits = c(-4.614553, -0.2253672), breaks = c(-4.614553, -2.41996, -0.2253672), labels = function(x) round(x,1), midpoint = -2.41996,
                        low = "#003D73", mid = "#1ECFD6", high = "#EDD170", guide = guide_colorbar(frame.colour = "black")) +
-  scale_x_discrete(name = "Treatment Scenario", labels = c("        1. Current Levels        ", "2. 90-90-90 (White MSM Only)", "3. 95-95-95 (White MSM Only)", "    4. 90-90-90 (All MSM)    ", "    5. 95-95-95 (All MSM)"    ))+#, values = c("#C05640", "#003D73", "#0878A4", "#1ECFD6", "#EDD170")) +
+  scale_x_discrete(labels=c("1" = "Current", "4" = "90-90-90", "5" = "95-95-95")) + 
   labs(x = "Treatment Scenario", y = "", title="Black/African American MSM") +
   guides(fill = guide_colourbar(barwidth = 10, barheight = 1.75, frame.colour = "black", frame.linewidth = 2)) +
   theme(legend.position = "bottom",
@@ -401,6 +405,7 @@ f2.2 <- ggplot() +
   scale_fill_gradient2(name = "Change in\nIncidence Rate White MSM",
                        limits = c(-4.614553, -0.2253671), breaks = c(-4.614553, -2.41996, -0.2253672), labels = function(x) round(x,1), midpoint = -2.41996,
                        low = "#003D73", mid = "#1ECFD6", high = "#EDD170", guide = guide_colorbar(frame.colour = "black")) +
+  scale_x_discrete(labels=c("1" = "Current", "4" = "90-90-90", "5" = "95-95-95")) + 
   labs(x = "", y = "", title="White MSM") +
   guides(fill = guide_colourbar(barwidth = 10, barheight = 2, frame.colour = "black", frame.linewidth = 2)) +
   theme(legend.position = "none",
@@ -423,7 +428,8 @@ f2.3 <- ggplot() +
   scale_fill_gradient2(name = "Change in\nIncidence Rate White MSM",
                        limits = c(-4.614553, -0.2253672), breaks = c(-4.614553, -2.41996, -0.2253672), labels = function(x) round(x,1), midpoint = -2.41996,
                        low = "#003D73", mid = "#1ECFD6", high = "#EDD170", guide = guide_colorbar(frame.colour = "black")) +
-  labs(x = "", y = "PrEP Coverage (%)", title="Overall Population") +
+  scale_x_discrete(labels=c("1" = "Current", "4" = "90-90-90", "5" = "95-95-95")) + 
+  labs(x = "", y = "PrEP Coverage (%)", title="All MSM") +
   guides(fill = guide_colourbar(barwidth = 10, barheight = 2, frame.colour = "black", frame.linewidth = 2)) +
   theme(legend.position = "none",
         legend.title = element_text(hjust = 0.5, face = "bold", size = 16),
@@ -454,8 +460,8 @@ grid.arrange(arrangeGrob(f2.3, left = textGrob("A)", x = unit(1, "npc"),
 
 ## _________________________________________________________________________________________________________________________________________________
 
-## Figure 3: Heatmaps showing actual values for IRR and IRD with colorbar centered at baseline value of 
-# IRR and IRD (2 panels, no common legend)
+## Original Figure 3 (now not included, here for reference): Heatmaps showing actual values for IRR and 
+# IRD with colorbar centered at baseline value of IRR and IRD (2 panels, no common legend)
 
 # Plot Incidence Rate Ratio Between Race Groups
 f3.1 <- ggplot() +
@@ -536,7 +542,7 @@ f4.1 <- ggplot() +
         axis.title = element_text(size = 20, colour = "black", face = "bold"),
         axis.text = element_text(size = 16, colour = "black"),
         plot.title = element_text(size = 22, colour = "black", face = "bold", hjust=0.5, vjust = 0.8))+
-  scale_x_discrete(labels=c("Base" = "Baseline", "90White" = "90-90-90 White","95White" = "95-95-95 White", "90All" = "90-90-90 All", "95All" = "95-95-95 All"))
+  scale_x_discrete(labels=c("1" = "Current", "4" = "90-90-90", "5" = "95-95-95"))
 
 # Plot 'NNT' white msm
 f4.2 <- ggplot() +
@@ -559,7 +565,7 @@ f4.2 <- ggplot() +
         axis.title = element_text(size = 20, colour = "black", face = "bold"),
         axis.text = element_text(size = 16, colour = "black"),
         plot.title = element_text(size = 22, colour = "black", face = "bold", hjust=0.5, vjust = 0.8))+
-  scale_x_discrete(labels=c("Base" = "Baseline", "90White" = "90-90-90 White","95White" = "95-95-95 White", "90All" = "90-90-90 All", "95All" = "95-95-95 All"))
+  scale_x_discrete(labels=c("1" = "Current", "4" = "90-90-90", "5" = "95-95-95"))
 
 # Plot both together with each legend
 grid.arrange(arrangeGrob(f4.1, left = textGrob("A)", x = unit(1, "npc"), 
