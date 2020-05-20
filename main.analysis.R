@@ -15,7 +15,7 @@ get_legend<-function(myggplot){
 }
 
 ## Pre-Processing: Import basic reports for each scenario into lists for data processing
-setwd("~/Desktop/research/atlanta_prevention_packages/titan.output/A3/main.analysis/Aggregate_Basic_Report_Black_A3/")
+setwd("~/Desktop/research/atlanta.prevention.packages/titan.output/A3/main.analysis/Aggregate_Basic_Report_Black_A3/")
 FILE_LIST<-list.files(pattern = "*.txt")
 BLACK_BASIC_REPORTS<-list()
 for (i in 1:length(FILE_LIST)){BLACK_BASIC_REPORTS[[i]]<-read.table(FILE_LIST[i], header = TRUE)}
@@ -23,7 +23,7 @@ names(BLACK_BASIC_REPORTS)<-FILE_LIST
 BLACK_REPORTS<-rbindlist(BLACK_BASIC_REPORTS, idcol = "origin")
 rm(BLACK_BASIC_REPORTS)
 
-setwd("~/Desktop/research/atlanta_prevention_packages/titan.output/A3/main.analysis/Aggregate_Basic_Report_White_A3/")
+setwd("~/Desktop/research/atlanta.prevention.packages/titan.output/A3/main.analysis/Aggregate_Basic_Report_White_A3/")
 WHITE_BASIC_REPORTS<-list()
 for (i in 1:length(FILE_LIST)){WHITE_BASIC_REPORTS[[i]]<-read.table(FILE_LIST[i], header = TRUE)}
 names(WHITE_BASIC_REPORTS)<-FILE_LIST
@@ -123,7 +123,7 @@ MAIN_RESULTS_SUMMARY<-SUMMARY_BY_RUN_MAIN %>%
             RATE_CHANGE_MEAN = mean(RATE_CHANGE), RATE_CHANGE_LL = quantile(RATE_CHANGE, probs = 0.025), RATE_CHANGE_UL = quantile(RATE_CHANGE, probs = 0.975))
 
 
-s## Data Analysis: Create new calculations for "relative" measures, i.e. within treament scenarios
+## Data Analysis: Create new calculations for "relative" measures, i.e. within treament scenarios
 BLACK_INCIDENCE_within<-BLACK_INCIDENCE
 for (i in 1:dim(BLACK_INCIDENCE)[1]) {
   if (BLACK_INCIDENCE_within$ART_COVERAGE[i]=="Bas") {
@@ -271,18 +271,19 @@ MAIN_RESULTS_SUMMARY_WITHIN<-SUMMARY_BY_RUN_MAIN_WITHIN %>%
 # Create data frame with only PrEP @ 0% runs and no 100
 SUMMARY_BY_RUN_MAIN_0PrEP<-SUMMARY_BY_RUN_MAIN[(SUMMARY_BY_RUN_MAIN$PREP_COVERAGE.x=="0.00"),]
 SUMMARY_BY_RUN_MAIN_0PrEP<-SUMMARY_BY_RUN_MAIN_0PrEP[!(SUMMARY_BY_RUN_MAIN_0PrEP$ART_COVERAGE.x=="100"),]
+SUMMARY_BY_RUN_MAIN_0PrEP$ART_COVERAGE.x <- ifelse(SUMMARY_BY_RUN_MAIN_0PrEP$ART_COVERAGE.x=="Bas", "1", SUMMARY_BY_RUN_MAIN_0PrEP$ART_COVERAGE.x)
 
 # Plot for black msm absolute incidence rate
 f1.1<-ggplot() +
   geom_boxplot(data = SUMMARY_BY_RUN_MAIN_0PrEP, aes(x = ART_COVERAGE.x, y = BLACK_RATE, fill=ART_COVERAGE.x), color = "black", size=0.6) +
   scale_y_continuous(limits = c(1, 6.5)) + 
-  scale_fill_manual(name = "Treatment Scenario", guide = guide_legend(), labels = c("   Baseline   ", "90-90-90 White", "95-95-95 White", " 90-90-90 All ", " 95-95-95 All "), values = c("#C05640", "#003D73", "#0878A4", "#1ECFD6", "#EDD170")) +
-  labs(x = "Treatment Scenario", y = "Incidence Rate Black MSM", title="Incidence Rate Black MSM") +
+  scale_fill_manual(name = "Treatment Scenario", guide = guide_legend(), labels = c("        1. Current Levels        ", "2. 90-90-90 (White MSM Only)", "3. 95-95-95 (White MSM Only)", "    4. 90-90-90 (All MSM)    ", "    5. 95-95-95 (All MSM)"    ), values = c("#C05640", "#003D73", "#0878A4", "#1ECFD6", "#EDD170")) +
+  labs(x = "Treatment Scenario", y = "", title="Black/African American MSM") +
   guides(fill = guide_legend(label.position = "bottom")) +
   #geom_hline(yintercept = 0, linetype = "dashed") +
   theme(legend.position = "bottom",
         legend.title = element_text(hjust = 0.5, face = "bold", size = 14),
-        legend.text = element_text(size = 10),
+        legend.text = element_text(size = 12),
         legend.direction = "horizontal",
         legend.box.just = "center",
         legend.spacing.x = unit(0.5, 'cm'),
@@ -294,12 +295,13 @@ f1.1<-ggplot() +
         axis.title = element_text(size = 16, colour = "black", face = "bold"),
         axis.text = element_text(size = 16, colour = "black"),
         plot.title = element_text(size = 18, colour = "black", face = "bold", hjust=0.5, vjust = 0.8))
+
 # Plot for white msm absolute incidence rate
 f1.2<-ggplot() +
   geom_boxplot(data = SUMMARY_BY_RUN_MAIN_0PrEP, aes(x = ART_COVERAGE.x, y = WHITE_RATE, fill=ART_COVERAGE.x), color = "black", size=0.6) +
   scale_y_continuous(limits = c(1, 6.5)) + 
   scale_fill_manual(name = "Treatment Scenario", labels = c("Baseline", "90-90-90 White", "95-95-95 White", "90-90-90 All", "95-95-95 All"), values = c("#C05640", "#003D73", "#0878A4", "#1ECFD6", "#EDD170")) +
-  labs(x = "Treatment Scenario", y = "Incidence Rate White MSM", title="Incidence Rate White MSM") +
+  labs(x = "", y = "", title="White MSM") +
   #geom_hline(yintercept = 0, linetype = "dashed") +
   theme(legend.position = "none",
         legend.title = element_text(hjust = 0.5, face = "bold", size = 14),
@@ -320,7 +322,7 @@ f1.3<-ggplot() +
   geom_boxplot(data = SUMMARY_BY_RUN_MAIN_0PrEP, aes(x = ART_COVERAGE.x, y = INCIDENCE_RATE, fill=ART_COVERAGE.x), color = "black", size=0.6) +
   scale_y_continuous(limits = c(1, 6.5)) + 
   scale_fill_manual(name = "Treatment Scenario", labels = c("Baseline", "90-90-90 White", "95-95-95 White", "90-90-90 All", "95-95-95 All"), values = c("#C05640", "#003D73", "#0878A4", "#1ECFD6", "#EDD170")) +
-  labs(x = "Treatment Scenario", y = "Incidence Rate All MSM", title="Incidence Rate All MSM") +
+  labs(x = "", y = "HIV incidence (per 100 person-years)", title="Overall Population") +
   #geom_hline(yintercept = 0, linetype = "dashed") +
   theme(legend.position = "none",
         legend.title = element_text(hjust = 0.5, face = "bold", size = 14),
@@ -361,18 +363,26 @@ grid.arrange(arrangeGrob(f1.3, left = textGrob("A)", x = unit(1, "npc"),
 # Create data frame with no PrEP @ 0% runs and no 100
 MAIN_RESULTS_SUMMARY_WITHIN_REDUCED <- MAIN_RESULTS_SUMMARY_WITHIN[!(MAIN_RESULTS_SUMMARY_WITHIN$PREP_COVERAGE.x=="0.00"),]
 MAIN_RESULTS_SUMMARY_WITHIN_REDUCED<-MAIN_RESULTS_SUMMARY_WITHIN_REDUCED[!(MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$ART_COVERAGE.x=="100"),]
+MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$ART_COVERAGE.x <- ifelse(MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$ART_COVERAGE.x=="Bas", "1", MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$ART_COVERAGE.x)
+MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x <- ifelse(MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x=="0.15", "15%", MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x)
+MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x <- ifelse(MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x=="0.30", "30%", MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x)
+MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x <- ifelse(MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x=="0.45", "45%", MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x)
+MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x <- ifelse(MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x=="0.60", "60%", MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x)
+MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x <- ifelse(MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x=="0.75", "75%", MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x)
+MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x <- ifelse(MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x=="0.90", "90%", MAIN_RESULTS_SUMMARY_WITHIN_REDUCED$PREP_COVERAGE.x)
 
 # Plot for black msm change in incidence rate
 f2.1 <- ggplot() +
   geom_tile(data = MAIN_RESULTS_SUMMARY_WITHIN_REDUCED, aes(x = ART_COVERAGE.x, y = PREP_COVERAGE.x, fill = BLACK_RATE_CHANGE_ABSOLUTE_MEAN), colour = "white", size = 0.4) +
-  scale_fill_gradient2(name = "Absolute Change in\nIncidence Rate Black MSM",
+  scale_fill_gradient2(name = "Absolute Change in HIV Incidence\n(per 100 person-years)",
                        limits = c(-4.614553, -0.2253672), breaks = c(-4.614553, -2.41996, -0.2253672), labels = function(x) round(x,1), midpoint = -2.41996,
                        low = "#003D73", mid = "#1ECFD6", high = "#EDD170", guide = guide_colorbar(frame.colour = "black")) +
-  labs(x = "Treatment Scenario", y = "PrEP Coverage", title="Added Change in Incidence Rate\n Due to PrEP in Black MSM") +
-  guides(fill = guide_colourbar(barwidth = 10, barheight = 2, frame.colour = "black", frame.linewidth = 2)) +
+  scale_x_discrete(name = "Treatment Scenario", labels = c("        1. Current Levels        ", "2. 90-90-90 (White MSM Only)", "3. 95-95-95 (White MSM Only)", "    4. 90-90-90 (All MSM)    ", "    5. 95-95-95 (All MSM)"    ))+#, values = c("#C05640", "#003D73", "#0878A4", "#1ECFD6", "#EDD170")) +
+  labs(x = "Treatment Scenario", y = "", title="Black/African American MSM") +
+  guides(fill = guide_colourbar(barwidth = 10, barheight = 1.75, frame.colour = "black", frame.linewidth = 2)) +
   theme(legend.position = "bottom",
-        legend.title = element_text(hjust = 0.5, face = "bold", size = 16),
-        legend.text = element_text(size = 15),
+        legend.title = element_text(hjust = 0.5, face = "bold", size = 12),
+        legend.text = element_text(size = 12),
         legend.box.just = "center",
         legend.spacing.x = unit(1.25, 'cm'),
         legend.key = element_rect(colour = "black"),
@@ -384,17 +394,17 @@ f2.1 <- ggplot() +
         axis.title = element_text(size = 16, colour = "black", face = "bold"),
         axis.text = element_text(size = 16, colour = "black"),
         plot.title = element_text(size = 16, colour = "black", face = "bold", hjust=0.5))
-
+f2.1
 # Plot for white msm change in incidence rate
 f2.2 <- ggplot() +
   geom_tile(data = MAIN_RESULTS_SUMMARY_WITHIN_REDUCED, aes(x = ART_COVERAGE.x, y = PREP_COVERAGE.x, fill = WHITE_RATE_CHANGE_ABSOLUTE_MEAN), colour = "white", size = 0.3) +
   scale_fill_gradient2(name = "Change in\nIncidence Rate White MSM",
                        limits = c(-4.614553, -0.2253671), breaks = c(-4.614553, -2.41996, -0.2253672), labels = function(x) round(x,1), midpoint = -2.41996,
                        low = "#003D73", mid = "#1ECFD6", high = "#EDD170", guide = guide_colorbar(frame.colour = "black")) +
-  labs(x = "Treatment Scenario", y = "", title="Added Change in Incidence Rate\n Due to PrEP in White MSM") +
+  labs(x = "", y = "", title="White MSM") +
   guides(fill = guide_colourbar(barwidth = 10, barheight = 2, frame.colour = "black", frame.linewidth = 2)) +
   theme(legend.position = "none",
-        legend.title = element_text(hjust = 0.5, face = "bold", size = 16),
+        legend.title = element_text(vjust=0.0,hjust = 0.5, face = "bold", size = 16),
         legend.text = element_text(size = 15),
         legend.spacing.x = unit(1.25, 'cm'),
         legend.key = element_rect(colour = "black"),
@@ -413,7 +423,7 @@ f2.3 <- ggplot() +
   scale_fill_gradient2(name = "Change in\nIncidence Rate White MSM",
                        limits = c(-4.614553, -0.2253672), breaks = c(-4.614553, -2.41996, -0.2253672), labels = function(x) round(x,1), midpoint = -2.41996,
                        low = "#003D73", mid = "#1ECFD6", high = "#EDD170", guide = guide_colorbar(frame.colour = "black")) +
-  labs(x = "Treatment Scenario", y = "", title="Added Change in Incidence Rate\n Due to PrEP in All MSM") +
+  labs(x = "", y = "PrEP Coverage (%)", title="Overall Population") +
   guides(fill = guide_colourbar(barwidth = 10, barheight = 2, frame.colour = "black", frame.linewidth = 2)) +
   theme(legend.position = "none",
         legend.title = element_text(hjust = 0.5, face = "bold", size = 16),
@@ -449,11 +459,11 @@ grid.arrange(arrangeGrob(f2.3, left = textGrob("A)", x = unit(1, "npc"),
 
 # Plot Incidence Rate Ratio Between Race Groups
 f3.1 <- ggplot() +
-  geom_tile(data = MAIN_RESULTS_SUMMARY_WITHIN_REDUCED, aes(x = ART_COVERAGE.x, y = PREP_COVERAGE.x, fill = RATE_RATIO_MEAN), colour = "black", size = 0.3) +
+  geom_tile(data = MAIN_RESULTS_SUMMARY_WITHIN_REDUCED, aes(x = ART_COVERAGE.x, y = PREP_COVERAGE.x, fill = RATE_RATIO_MEAN), colour = "white", size = 0.4) +
   scale_fill_gradient2(name = "Incidence Rate Ratio",
                        limits = c(3.549516, 5.74), breaks = c(3.549516, 4.66, 5.74), labels = function(x) round(x,1), midpoint = 4.66,
-                       low = "#ece2f0", mid = "#a6bddb", high = "#1c9099", guide = guide_colorbar(frame.colour = "black")) +
-  labs(x = "Treatment Scenario", y = "PrEP Coverage", title = "Incidence Rate Ratio") +
+                       low = "#edf8b1", mid = "#7fcdbb", high = "#2c7fb8", guide = guide_colorbar(frame.colour = "black")) +
+  labs(x = "Treatment Scenario", y = "PrEP Coverage (%)", title = "Incidence Rate Ratio") +
   guides(fill = guide_colourbar(barwidth = 10, barheight = 2, frame.colour = "black", frame.linewidth = 2)) +
   theme(legend.position = "bottom",
         legend.title = element_text(hjust = 0.5, face = "bold", size = 16),
@@ -472,7 +482,7 @@ f3.1 <- ggplot() +
 
 ### Plot Incidence Rate Difference Between Race Groups
 f3.2 <- ggplot() +
-  geom_tile(data = MAIN_RESULTS_SUMMARY_WITHIN_REDUCED, aes(x = ART_COVERAGE.x, y = PREP_COVERAGE.x, fill = RATE_DIFFERENCE_MEAN), colour = "black", size = 0.3) +
+  geom_tile(data = MAIN_RESULTS_SUMMARY_WITHIN_REDUCED, aes(x = ART_COVERAGE.x, y = PREP_COVERAGE.x, fill = RATE_DIFFERENCE_MEAN), colour = "white", size = 0.4) +
   scale_fill_gradient2(name = "Incidence Rate Difference",
                        limits = c(0.75, 3.77), breaks = c(0.75, 2.26, 3.77), labels = function(x) round(x,1), midpoint = 2.26,
                        low = "#e0ecf4", mid = "#9ebcda", high = "#8856a7", guide = guide_colorbar(frame.colour = "black")) +
@@ -507,11 +517,11 @@ grid.arrange(arrangeGrob(f3.1, left = textGrob("A)", x = unit(1, "npc"),
 
 # Plot 'NNT' black msm
 f4.1 <- ggplot() +
-  geom_tile(data = MAIN_RESULTS_SUMMARY_WITHIN_REDUCED, aes(x = ART_COVERAGE.x, y = PREP_COVERAGE.x, fill = BLACK_NNT_MEAN), colour = "black", size = 0.3) +
+  geom_tile(data = MAIN_RESULTS_SUMMARY_WITHIN_REDUCED, aes(x = ART_COVERAGE.x, y = PREP_COVERAGE.x, fill = BLACK_NNT_MEAN), colour = "white", size = 0.4) +
   scale_fill_gradient2(name = "Person-years on PrEP\nper HIV infection averted",
                        limits = c(20, 30), breaks = c(20, 25, 30), labels = function(x) round(x,1), midpoint = 25,
                        low = "#c51b8a", mid = "#fa9fb5", high = "#fde0dd", guide = guide_colorbar(frame.colour = "black")) +
-  labs(x = "Treatment Scenario", y = "PrEP Coverage", title="Person-years on PrEP\nper HIV infection averted\nBlack MSM") +
+  labs(x = "Treatment Scenario", y = "PrEP Coverage", title="Black/African American MSM") +
   guides(fill = guide_colourbar(barwidth = 10, barheight = 2, frame.colour = "black", frame.linewidth = 2)) +
   theme(legend.position = "bottom",
         legend.title = element_text(hjust = 0.5, face = "bold", size = 16),
@@ -530,11 +540,11 @@ f4.1 <- ggplot() +
 
 # Plot 'NNT' white msm
 f4.2 <- ggplot() +
-  geom_tile(data = MAIN_RESULTS_SUMMARY_WITHIN_REDUCED, aes(x = ART_COVERAGE.x, y = PREP_COVERAGE.x, fill = WHITE_NNT_MEAN), colour = "black", size = 0.3) +
+  geom_tile(data = MAIN_RESULTS_SUMMARY_WITHIN_REDUCED, aes(x = ART_COVERAGE.x, y = PREP_COVERAGE.x, fill = WHITE_NNT_MEAN), colour = "white", size = 0.4) +
   scale_fill_gradient2(name = "Person-years on PrEP\nper HIV infection averted",
                        limits = c(50, 85), breaks = c(50, (50 + 85)/2, 85), labels = function(x) round(x,1), midpoint = (50 + 85)/2,
                        low = "#d95f0e", mid = "#fec44f", high = "#fff7bc", guide = guide_colorbar(frame.colour = "black")) +
-    labs(x = "Treatment Scenario", y = "", title="Person-years on PrEP\nper HIV infection averted\nWhite MSM") +
+    labs(x = "Treatment Scenario", y = "", title="White MSM") +
   guides(fill = guide_colourbar(barwidth = 10, barheight = 2, frame.colour = "black", frame.linewidth = 2)) +
   theme(legend.position = "bottom",
         legend.title = element_text(hjust = 0.5, face = "bold", size = 16),
@@ -557,6 +567,39 @@ grid.arrange(arrangeGrob(f4.1, left = textGrob("A)", x = unit(1, "npc"),
              arrangeGrob(f4.2, left = textGrob("B)", x = unit(1, "npc"), 
                                                y = unit(.95, "npc"),gp=gpar(fontsize=20))),
              ncol=2)
+
+## _________________________________________________________________________________________________________________________________________________
+
+## Supplemental Figure 1: Box Plot with Error Bars showing validation to calibration targets (race-specific incidence rates)
+# build dataframe of calibration targets data
+calibration.data <- data.frame(name=c("Black/African American", "White", "Black/African American", "White"),
+                               source=c("A","A","B","B"),
+                               value=c(6.5, 1.7, 5.95, 1.7069),
+                               bottom.int=c(2.3, 1, 0.4, 0.12),
+                               top.int=c(3.2, 1.6, 0.47, 0.13))
+
+ggplot(calibration.data, aes(x=name, y=value, fill=source)) +
+  geom_bar(stat="identity", color="black", alpha=0.7, position=position_dodge()) +
+  geom_errorbar(aes(ymin=value-bottom.int, ymax=value+top.int), width=0.2, colour="black", position=position_dodge(0.9)) +  
+  labs(x = "", y = "Incidence Rate (per 100 person-years)", title="") +
+  scale_fill_brewer(palette="Paired", name = "", guide = guide_legend(), labels = c("InvolveMENt Cohort","The TITAN Model"))+ #values = c("#d95f0e", "#fff7bc")) +
+  #guides(fill = guide_legend(label.position = "bottom")) +
+  #geom_hline(yintercept = 0, linetype = "dashed") +
+  theme(legend.position = "bottom",
+        legend.title = element_text(hjust = 0.5, face = "bold", size = 14),
+        legend.text = element_text(size = 10),
+        legend.direction = "horizontal",
+        legend.box.just = "center",
+        legend.spacing.x = unit(0.5, 'cm'),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        panel.background = element_blank(),
+        axis.ticks = element_blank(),
+        axis.line = element_line(color = "black"),
+        axis.title = element_text(size = 16, colour = "black", face = "bold"),
+        axis.text = element_text(size = 16, colour = "black"),
+        plot.title = element_text(size = 18, colour = "black", face = "bold", hjust=0.5, vjust = 0.8))
+
 
 ## _________________________________________________________________________________________________________________________________________________
 ## _________________________________________________________________________________________________________________________________________________
