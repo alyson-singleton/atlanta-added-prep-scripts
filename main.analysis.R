@@ -15,7 +15,7 @@ get_legend<-function(myggplot){
 }
 
 ## Pre-Processing: Import basic reports for each scenario into lists for data processing
-setwd("~/Desktop/research/atlanta.prevention.packages/titan.output/A3/main.analysis/Aggregate_Basic_Report_Black_A3/")
+setwd("~/Desktop/research/atlanta.added.prep/titan.output/A3/main.analysis/Aggregate_Basic_Report_Black_A3/")
 FILE_LIST<-list.files(pattern = "*.txt")
 BLACK_BASIC_REPORTS<-list()
 for (i in 1:length(FILE_LIST)){BLACK_BASIC_REPORTS[[i]]<-read.table(FILE_LIST[i], header = TRUE)}
@@ -23,7 +23,7 @@ names(BLACK_BASIC_REPORTS)<-FILE_LIST
 BLACK_REPORTS<-rbindlist(BLACK_BASIC_REPORTS, idcol = "origin")
 rm(BLACK_BASIC_REPORTS)
 
-setwd("~/Desktop/research/atlanta.prevention.packages/titan.output/A3/main.analysis/Aggregate_Basic_Report_White_A3/")
+setwd("~/Desktop/research/atlanta.added.prep/titan.output/A3/main.analysis/Aggregate_Basic_Report_White_A3/")
 WHITE_BASIC_REPORTS<-list()
 for (i in 1:length(FILE_LIST)){WHITE_BASIC_REPORTS[[i]]<-read.table(FILE_LIST[i], header = TRUE)}
 names(WHITE_BASIC_REPORTS)<-FILE_LIST
@@ -279,7 +279,7 @@ SUMMARY_BY_RUN_MAIN_0PrEP<-SUMMARY_BY_RUN_MAIN_0PrEP[!(SUMMARY_BY_RUN_MAIN_0PrEP
 f1.1<-ggplot() +
   geom_boxplot(data = SUMMARY_BY_RUN_MAIN_0PrEP, aes(x = ART_COVERAGE.x, y = BLACK_RATE), color = "black", fill="lightgrey", size=0.6) +
   scale_y_continuous(limits = c(1, 6.5)) + 
-  scale_x_discrete(name = "Treatment Scenario", labels = c("Current", "90-90-90", "95-95-95")) +
+  scale_x_discrete(name = "Treatment Scenario", labels = c("Current", " 90-90-90 ", " 95-95-95")) +
   labs(x = "Treatment Scenario", y = "", title="Black/African American MSM") +
   guides(fill = guide_legend(label.position = "bottom")) +
   #geom_hline(yintercept = 0, linetype = "dashed") +
@@ -294,17 +294,18 @@ f1.1<-ggplot() +
         panel.background = element_blank(),
         axis.ticks = element_blank(),
         axis.line = element_line(color = "black"),
-        axis.title = element_text(size = 16, colour = "black", face = "bold"),
-        axis.text = element_text(size = 15, colour = "black"),
-        plot.title = element_text(size = 18, colour = "black", face = "bold", hjust=0.5, vjust = 0.8))
+        axis.title.y = element_text(size = 16, colour = "black", face = "bold"),
+        axis.title.x = element_text(size = 15, colour = "black", face = "bold", margin = margin(t = 10, r = 0, b = 0, l = 0)),
+        axis.text = element_text(size = 13, colour = "black"),
+        plot.title = element_text(size = 14, colour = "black", face = "bold", hjust=0.5, vjust = 0.8))
 
 # Plot for white msm absolute incidence rate
 f1.2<-ggplot() +
   geom_boxplot(data = SUMMARY_BY_RUN_MAIN_0PrEP, aes(x = ART_COVERAGE.x, y = WHITE_RATE), color = "black", fill="lightgrey", size=0.6) +
   scale_y_continuous(limits = c(1, 6.5)) + 
-  scale_x_discrete(name = "", labels = c("Current", "90-90-90", "95-95-95")) +
+  scale_x_discrete(name = "", labels = c("Current", " 90-90-90 ", " 95-95-95")) +
   labs(x = "", y = "", title="White MSM") +
-  #geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_vline(xintercept=4, linetype = "dashed", color="white") +
   theme(legend.position = "none",
         legend.title = element_text(hjust = 0.5, face = "bold", size = 14),
         legend.text = element_text(size = 10),
@@ -316,14 +317,16 @@ f1.2<-ggplot() +
         panel.background = element_blank(),
         axis.ticks = element_blank(),
         axis.line = element_line(color = "black"),
-        axis.title = element_text(size = 16, colour = "black", face = "bold"),
-        axis.text = element_text(size = 15, colour = "black"),
-        plot.title = element_text(size = 18, colour = "black", face = "bold", hjust=0.5, vjust = 0.8))
+        axis.title.y = element_text(size = 16, colour = "black", face = "bold"),
+        axis.title.x = element_text(size = 16, colour = "black", face = "bold", margin = margin(t = 10, r = 0, b = 0, l = 0)),
+        axis.text = element_text(size = 13, colour = "black"),
+        plot.title = element_text(size = 14, colour = "black", face = "bold", hjust=0.5, vjust = 0.8))
+
 # Plot for overall msm absolute incidence rate
 f1.3<-ggplot() +
   geom_boxplot(data = SUMMARY_BY_RUN_MAIN_0PrEP, aes(x = ART_COVERAGE.x, y = INCIDENCE_RATE), color = "black", fill="lightgrey", size=0.6) +
   scale_y_continuous(limits = c(1, 6.5)) + 
-  scale_x_discrete(name = "", labels = c("Current", "90-90-90", "95-95-95")) +
+  scale_x_discrete(name = "", labels = c("Current", " 90-90-90 ", " 95-95-95")) +
   labs(x = "", y = "HIV incidence (per 100 person-years)", title="All MSM") +
   #geom_hline(yintercept = 0, linetype = "dashed") +
   theme(legend.position = "none",
@@ -337,19 +340,20 @@ f1.3<-ggplot() +
         panel.background = element_blank(),
         axis.ticks = element_blank(),
         axis.line = element_line(color = "black"),
-        axis.title = element_text(size = 16, colour = "black", face = "bold"),
-        axis.text = element_text(size = 15, colour = "black"),
-        plot.title = element_text(size = 18, colour = "black", face = "bold", hjust=0.5, vjust = 0.8))
+        axis.title.y = element_text(size = 15, colour = "black", face = "bold"),
+        axis.title.x = element_text(size = 16, colour = "black", face = "bold", margin = margin(t = 10, r = 0, b = 0, l = 0)),
+        axis.text = element_text(size = 13, colour = "black"),
+        plot.title = element_text(size = 14, colour = "black", face = "bold", hjust=0.5, vjust = 0.8))
 
 # Plot all three together with a common legend
 #legend <- get_legend(f1.1)
 #f1.1 <- f1.1 + theme(legend.position="none")
 grid.arrange(arrangeGrob(f1.3, left = textGrob("A)", x = unit(1, "npc"), 
-                                               y = unit(.95, "npc"),gp=gpar(fontsize=20))), 
+                                               y = unit(.95, "npc"),gp=gpar(fontsize=16))), 
              arrangeGrob(f1.1, left = textGrob("B)", x = unit(1, "npc"), 
-                                               y = unit(.95, "npc"),gp=gpar(fontsize=20))),
+                                               y = unit(.95, "npc"),gp=gpar(fontsize=16))),
              arrangeGrob(f1.2, left = textGrob("C)", x = unit(1, "npc"), 
-                                               y = unit(.95, "npc"),gp=gpar(fontsize=20))),
+                                               y = unit(.95, "npc"),gp=gpar(fontsize=16))),
              ncol=3, nrow=1,
              layout_matrix = rbind(c(1,2,3)),
              widths = c(2.7, 2.7, 2.7))
@@ -380,8 +384,9 @@ f2.1 <- ggplot() +
   geom_tile(data = MAIN_RESULTS_SUMMARY_WITHIN_REDUCED, aes(x = ART_COVERAGE.x, y = PREP_COVERAGE.x, fill = BLACK_RATE_CHANGE_ABSOLUTE_MEAN), colour = "white", size = 0.4) +
   scale_fill_gradient2(name = "Absolute Change in HIV Incidence\n(per 100 person-years)",
                        limits = c(-4.614553, -0.2253672), breaks = c(-4.614553, -2.41996, -0.2253672), labels = function(x) round(x,1), midpoint = -2.41996,
-                       low = "#003D73", mid = "#1ECFD6", high = "#EDD170", guide = guide_colorbar(frame.colour = "black")) +
-  scale_x_discrete(labels=c("1" = "Current", "4" = "90-90-90", "5" = "95-95-95")) + 
+                       low = "#000000", mid = "#888888", high = "#F0F0F0", guide = guide_colorbar(frame.colour = "black")) +                       
+                       #low = "#003D73", mid = "#1ECFD6", high = "#EDD170", guide = guide_colorbar(frame.colour = "black")) +
+  scale_x_discrete(labels=c("1" = "Current", "4" = " 90-90-90 ", "5" = " 95-95-95")) + 
   labs(x = "Treatment Scenario", y = "", title="Black/African American MSM") +
   guides(fill = guide_colourbar(barwidth = 10, barheight = 1.75, frame.colour = "black", frame.linewidth = 2)) +
   theme(legend.position = "bottom",
@@ -395,17 +400,19 @@ f2.1 <- ggplot() +
         panel.background = element_blank(),
         axis.ticks = element_blank(),
         axis.line = element_blank(),
-        axis.title = element_text(size = 16, colour = "black", face = "bold"),
-        axis.text = element_text(size = 16, colour = "black"),
-        plot.title = element_text(size = 16, colour = "black", face = "bold", hjust=0.5))
-f2.1
+        axis.title.y = element_text(size = 15, colour = "black", face = "bold"),
+        axis.title.x = element_text(size = 16, colour = "black", face = "bold", margin = margin(t = 10, r = 0, b = 5, l = 0)),
+        axis.text = element_text(size = 12, colour = "black"),
+        plot.title = element_text(size = 14, colour = "black", face = "bold", hjust=0.5))
+
 # Plot for white msm change in incidence rate
 f2.2 <- ggplot() +
   geom_tile(data = MAIN_RESULTS_SUMMARY_WITHIN_REDUCED, aes(x = ART_COVERAGE.x, y = PREP_COVERAGE.x, fill = WHITE_RATE_CHANGE_ABSOLUTE_MEAN), colour = "white", size = 0.3) +
   scale_fill_gradient2(name = "Change in\nIncidence Rate White MSM",
                        limits = c(-4.614553, -0.2253671), breaks = c(-4.614553, -2.41996, -0.2253672), labels = function(x) round(x,1), midpoint = -2.41996,
-                       low = "#003D73", mid = "#1ECFD6", high = "#EDD170", guide = guide_colorbar(frame.colour = "black")) +
-  scale_x_discrete(labels=c("1" = "Current", "4" = "90-90-90", "5" = "95-95-95")) + 
+                       low = "#000000", mid = "#888888", high = "#F0F0F0", guide = guide_colorbar(frame.colour = "black")) +                       
+                       #low = "#003D73", mid = "#1ECFD6", high = "#EDD170", guide = guide_colorbar(frame.colour = "black")) +
+  scale_x_discrete(labels=c("1" = "Current", "4" = " 90-90-90 ", "5" = " 95-95-95")) + 
   labs(x = "", y = "", title="White MSM") +
   guides(fill = guide_colourbar(barwidth = 10, barheight = 2, frame.colour = "black", frame.linewidth = 2)) +
   theme(legend.position = "none",
@@ -418,17 +425,19 @@ f2.2 <- ggplot() +
         panel.background = element_blank(),
         axis.ticks = element_blank(),
         axis.line = element_blank(),
-        axis.title = element_text(size = 16, colour = "black", face = "bold"),
-        axis.text = element_text(size = 16, colour = "black"),
-        plot.title = element_text(size = 16, colour = "black", face = "bold", hjust=0.5))
+        axis.title.y = element_text(size = 15, colour = "black", face = "bold"),
+        axis.title.x = element_text(size = 16, colour = "black", face = "bold", margin = margin(t = 10, r = 0, b = 5, l = 0)),
+        axis.text = element_text(size = 12, colour = "black"),
+        plot.title = element_text(size = 14, colour = "black", face = "bold", hjust=0.5))
 
 # Plot for all msm change in incidence rate
 f2.3 <- ggplot() +
   geom_tile(data = MAIN_RESULTS_SUMMARY_WITHIN_REDUCED, aes(x = ART_COVERAGE.x, y = PREP_COVERAGE.x, fill = INCIDENCE_RATE_CHANGE_ABSOLUTE_MEAN), colour = "white", size = 0.3) +
   scale_fill_gradient2(name = "Change in\nIncidence Rate White MSM",
                        limits = c(-4.614553, -0.2253672), breaks = c(-4.614553, -2.41996, -0.2253672), labels = function(x) round(x,1), midpoint = -2.41996,
-                       low = "#003D73", mid = "#1ECFD6", high = "#EDD170", guide = guide_colorbar(frame.colour = "black")) +
-  scale_x_discrete(labels=c("1" = "Current", "4" = "90-90-90", "5" = "95-95-95")) + 
+                       low = "#000000", mid = "#888888", high = "#F0F0F0", guide = guide_colorbar(frame.colour = "black")) +                       
+                       #low = "#003D73", mid = "#1ECFD6", high = "#EDD170", guide = guide_colorbar(frame.colour = "black")) +
+  scale_x_discrete(labels=c("1" = "Current", "4" = " 90-90-90 ", "5" = " 95-95-95")) + 
   labs(x = "", y = "PrEP Coverage (%)", title="All MSM") +
   guides(fill = guide_colourbar(barwidth = 10, barheight = 2, frame.colour = "black", frame.linewidth = 2)) +
   theme(legend.position = "none",
@@ -441,19 +450,20 @@ f2.3 <- ggplot() +
         panel.background = element_blank(),
         axis.ticks = element_blank(),
         axis.line = element_blank(),
-        axis.title = element_text(size = 16, colour = "black", face = "bold"),
-        axis.text = element_text(size = 16, colour = "black"),
-        plot.title = element_text(size = 16, colour = "black", face = "bold", hjust=0.5))
+        axis.title.y = element_text(size = 15, colour = "black", face = "bold"),
+        axis.title.x = element_text(size = 16, colour = "black", face = "bold", margin = margin(t = 10, r = 0, b = 5, l = 0)),
+        axis.text = element_text(size = 12, colour = "black"),
+        plot.title = element_text(size = 14, colour = "black", face = "bold", hjust=0.5))
 
 # Plot all three together with a common legend
 legend <- get_legend(f2.1)
 f2.1 <- f2.1 + theme(legend.position="none")
 grid.arrange(arrangeGrob(f2.3, left = textGrob("A)", x = unit(1, "npc"), 
-                                               y = unit(.95, "npc"),gp=gpar(fontsize=20))), 
+                                               y = unit(.95, "npc"),gp=gpar(fontsize=16))), 
              arrangeGrob(f2.1, left = textGrob("B)", x = unit(1, "npc"), 
-                                               y = unit(.95, "npc"),gp=gpar(fontsize=20))),
+                                               y = unit(.95, "npc"),gp=gpar(fontsize=16))),
              arrangeGrob(f2.2, left = textGrob("C)", x = unit(1, "npc"), 
-                                               y = unit(.95, "npc"),gp=gpar(fontsize=20))),
+                                               y = unit(.95, "npc"),gp=gpar(fontsize=16))),
              legend, ncol=3, nrow=2,
              layout_matrix = rbind(c(1,2,3), c(4,4,4)),
              widths = c(2.7, 2.7, 2.7), heights = c(2.5, 0.2))
@@ -482,7 +492,7 @@ f3.1 <- ggplot() +
         axis.ticks = element_blank(),
         axis.line = element_blank(),
         axis.title = element_text(size = 20, colour = "black", face = "bold"),
-        axis.text = element_text(size = 16, colour = "black"),
+        axis.text = element_text(size = 13, colour = "black"),
         plot.title = element_text(size = 22, colour = "black", face = "bold", hjust=0.5, vjust = 0.8))+
   scale_x_discrete(labels=c("Base" = "Baseline", "90White" = "90-90-90 White","95White" = "95-95-95 White", "90All" = "90-90-90 All", "95All" = "95-95-95 All"))
 
@@ -505,15 +515,15 @@ f3.2 <- ggplot() +
         axis.ticks = element_blank(),
         axis.line = element_blank(),
         axis.title = element_text(size = 20, colour = "black", face = "bold"),
-        axis.text = element_text(size = 16, colour = "black"),
+        axis.text = element_text(size = 13, colour = "black"),
         plot.title = element_text(size = 22, colour = "black", face = "bold", hjust=0.5, vjust = 0.8))+
   scale_x_discrete(labels=c("Base" = "Baseline", "90White" = "90-90-90 White","95White" = "95-95-95 White", "90All" = "90-90-90 All", "95All" = "95-95-95 All"))
 
 # Plot both together with each legend
 grid.arrange(arrangeGrob(f3.1, left = textGrob("A)", x = unit(1, "npc"), 
-                                               y = unit(.95, "npc"),gp=gpar(fontsize=20))), 
+                                               y = unit(.95, "npc"),gp=gpar(fontsize=18))), 
              arrangeGrob(f3.2, left = textGrob("B)", x = unit(1, "npc"), 
-                                               y = unit(.95, "npc"),gp=gpar(fontsize=20))),
+                                               y = unit(.95, "npc"),gp=gpar(fontsize=18))),
              ncol=2)
 
 ## _________________________________________________________________________________________________________________________________________________
@@ -526,12 +536,13 @@ f4.1 <- ggplot() +
   geom_tile(data = MAIN_RESULTS_SUMMARY_WITHIN_REDUCED, aes(x = ART_COVERAGE.x, y = PREP_COVERAGE.x, fill = BLACK_NNT_MEAN), colour = "white", size = 0.4) +
   scale_fill_gradient2(name = "Person-years on PrEP\nper HIV infection averted",
                        limits = c(20, 30), breaks = c(20, 25, 30), labels = function(x) round(x,1), midpoint = 25,
-                       low = "#c51b8a", mid = "#fa9fb5", high = "#fde0dd", guide = guide_colorbar(frame.colour = "black")) +
+                       low = "#666666", mid = "#BBBBBB", high = "#EEEEEE", guide = guide_colorbar(frame.colour = "black")) +
+                       #low = "#c51b8a", mid = "#fa9fb5", high = "#fde0dd", guide = guide_colorbar(frame.colour = "black")) +
   labs(x = "Treatment Scenario", y = "PrEP Coverage", title="Black/African American MSM") +
   guides(fill = guide_colourbar(barwidth = 10, barheight = 2, frame.colour = "black", frame.linewidth = 2)) +
   theme(legend.position = "bottom",
-        legend.title = element_text(hjust = 0.5, face = "bold", size = 16),
-        legend.text = element_text(size = 15),
+        legend.title = element_text(hjust = 0.5, face = "bold", size = 10.5),
+        legend.text = element_text(size = 13),
         legend.spacing.x = unit(1.25, 'cm'),
         legend.key = element_rect(colour = "black"),
         panel.grid.major = element_blank(),
@@ -539,22 +550,24 @@ f4.1 <- ggplot() +
         panel.background = element_blank(),
         axis.ticks = element_blank(),
         axis.line = element_blank(),
-        axis.title = element_text(size = 20, colour = "black", face = "bold"),
+        axis.title.y = element_text(size = 15, colour = "black", face = "bold", margin = margin(t = 00, r = 10, b = 0, l = 0)),
+        axis.title.x = element_text(size = 16, colour = "black", face = "bold", margin = margin(t = 10, r = 0, b = 0, l = 0)),
         axis.text = element_text(size = 16, colour = "black"),
-        plot.title = element_text(size = 22, colour = "black", face = "bold", hjust=0.5, vjust = 0.8))+
-  scale_x_discrete(labels=c("1" = "Current", "4" = "90-90-90", "5" = "95-95-95"))
+        plot.title = element_text(size = 16, colour = "black", face = "bold", hjust=0.5, vjust = 0.8))+
+  scale_x_discrete(labels=c("1" = "Current", "4" = " 90-90-90 ", "5" = " 95-95-95"))
 
 # Plot 'NNT' white msm
 f4.2 <- ggplot() +
   geom_tile(data = MAIN_RESULTS_SUMMARY_WITHIN_REDUCED, aes(x = ART_COVERAGE.x, y = PREP_COVERAGE.x, fill = WHITE_NNT_MEAN), colour = "white", size = 0.4) +
   scale_fill_gradient2(name = "Person-years on PrEP\nper HIV infection averted",
                        limits = c(50, 85), breaks = c(50, (50 + 85)/2, 85), labels = function(x) round(x,1), midpoint = (50 + 85)/2,
-                       low = "#d95f0e", mid = "#fec44f", high = "#fff7bc", guide = guide_colorbar(frame.colour = "black")) +
-    labs(x = "Treatment Scenario", y = "", title="White MSM") +
+                       low = "#000000", mid = "#444444", high = "#999999", guide = guide_colorbar(frame.colour = "black")) +
+                       #low = "#d95f0e", mid = "#fec44f", high = "#fff7bc", guide = guide_colorbar(frame.colour = "black")) +
+  labs(x = "Treatment Scenario", y = "", title="White MSM") +
   guides(fill = guide_colourbar(barwidth = 10, barheight = 2, frame.colour = "black", frame.linewidth = 2)) +
   theme(legend.position = "bottom",
-        legend.title = element_text(hjust = 0.5, face = "bold", size = 16),
-        legend.text = element_text(size = 15),
+        legend.title = element_text(hjust = 0.5, face = "bold", size = 10.5),
+        legend.text = element_text(size = 13),
         legend.spacing.x = unit(1.25, 'cm'),
         legend.key = element_rect(colour = "black"),
         panel.grid.major = element_blank(),
@@ -562,38 +575,39 @@ f4.2 <- ggplot() +
         panel.background = element_blank(),
         axis.ticks = element_blank(),
         axis.line = element_blank(),
-        axis.title = element_text(size = 20, colour = "black", face = "bold"),
+        axis.title.y = element_text(size = 15, colour = "black", face = "bold", margin = margin(t = 00, r = 10, b = 0, l = 0)),
+        axis.title.x = element_text(size = 16, colour = "black", face = "bold", margin = margin(t = 10, r = 0, b = 0, l = 0)),
         axis.text = element_text(size = 16, colour = "black"),
-        plot.title = element_text(size = 22, colour = "black", face = "bold", hjust=0.5, vjust = 0.8))+
-  scale_x_discrete(labels=c("1" = "Current", "4" = "90-90-90", "5" = "95-95-95"))
+        plot.title = element_text(size = 16, colour = "black", face = "bold", hjust=0.5, vjust = 0.8))+
+  scale_x_discrete(labels=c("1" = "Current", "4" = " 90-90-90 ", "5" = " 95-95-95"))
 
 # Plot both together with each legend
 grid.arrange(arrangeGrob(f4.1, left = textGrob("A)", x = unit(1, "npc"), 
-                                               y = unit(.95, "npc"),gp=gpar(fontsize=20))), 
+                                               y = unit(.95, "npc"),gp=gpar(fontsize=16))), 
              arrangeGrob(f4.2, left = textGrob("B)", x = unit(1, "npc"), 
-                                               y = unit(.95, "npc"),gp=gpar(fontsize=20))),
+                                               y = unit(.95, "npc"),gp=gpar(fontsize=16))),
              ncol=2)
 
 ## _________________________________________________________________________________________________________________________________________________
 
 ## Supplemental Figure 1: Box Plot with Error Bars showing validation to calibration targets (race-specific incidence rates)
 # build dataframe of calibration targets data
-calibration.data <- data.frame(name=c("Black/African American", "White", "Black/African American", "White"),
+calibration.data <- data.frame(name=c("Black/African American MSM", "White MSM", "Black/African American MSM", "White MSM"),
                                source=c("A","A","B","B"),
                                value=c(6.5, 1.7, 5.95, 1.7069),
                                bottom.int=c(2.3, 1, 0.4, 0.12),
                                top.int=c(3.2, 1.6, 0.47, 0.13))
 
 ggplot(calibration.data, aes(x=name, y=value, fill=source)) +
-  geom_bar(stat="identity", color="black", alpha=0.7, position=position_dodge()) +
+  geom_bar(stat="identity", color="black", alpha=0.6, position=position_dodge()) +
   geom_errorbar(aes(ymin=value-bottom.int, ymax=value+top.int), width=0.2, colour="black", position=position_dodge(0.9)) +  
   labs(x = "", y = "Incidence Rate (per 100 person-years)", title="") +
-  scale_fill_brewer(palette="Paired", name = "", guide = guide_legend(), labels = c("InvolveMENt Cohort","The TITAN Model"))+ #values = c("#d95f0e", "#fff7bc")) +
+  scale_fill_grey(start=0.3, end=0.8, name="", guide = guide_legend(), labels = c("InvolveMENt Cohort","The TITAN Model"))+ #values = c("#d95f0e", "#fff7bc")) +
   #guides(fill = guide_legend(label.position = "bottom")) +
   #geom_hline(yintercept = 0, linetype = "dashed") +
   theme(legend.position = "bottom",
         legend.title = element_text(hjust = 0.5, face = "bold", size = 14),
-        legend.text = element_text(size = 10),
+        legend.text = element_text(size = 14),
         legend.direction = "horizontal",
         legend.box.just = "center",
         legend.spacing.x = unit(0.5, 'cm'),

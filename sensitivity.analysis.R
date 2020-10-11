@@ -7,7 +7,7 @@ library(data.table)
 library(car)
 
 ## Pre-Processing: Import basic reports for each scenario into lists for data processing
-setwd("~/Desktop/research/atlanta.prevention.packages/titan.output/A3/sensitivity.analysis/Aggregate_Basic_Report_Black_A3_Sens/")
+setwd("~/Desktop/research/atlanta.added.prep/titan.output/A3/sensitivity.analysis/Aggregate_Basic_Report_Black_A3_Sens/")
 FILE_LIST<-list.files(pattern = "*.txt")
 BLACK_BASIC_REPORTS<-list()
 for (i in 1:length(FILE_LIST)){BLACK_BASIC_REPORTS[[i]]<-read.table(FILE_LIST[i], header = TRUE)}
@@ -15,7 +15,7 @@ names(BLACK_BASIC_REPORTS)<-FILE_LIST
 BLACK_REPORTS<-rbindlist(BLACK_BASIC_REPORTS, idcol = "origin")
 rm(BLACK_BASIC_REPORTS)
 
-setwd("~/Desktop/research/atlanta.prevention.packages/titan.output/A3/sensitivity.analysis/Aggregate_Basic_Report_White_A3_Sens/")
+setwd("~/Desktop/research/atlanta.added.prep/titan.output/A3/sensitivity.analysis/Aggregate_Basic_Report_White_A3_Sens/")
 WHITE_BASIC_REPORTS<-list()
 for (i in 1:length(FILE_LIST)){WHITE_BASIC_REPORTS[[i]]<-read.table(FILE_LIST[i], header = TRUE)}
 names(WHITE_BASIC_REPORTS)<-FILE_LIST
@@ -115,7 +115,7 @@ SENSITIVITY_RESULTS_SUMMARY <- SUMMARY_BY_RUN_SENSITIVITY %>%
 p1a<-ggplot() +
   geom_boxplot(data = LOW_PREP_SCENARIOS, aes(x = ART_COVERAGE.x, y = INCIDENCE_RATE, fill = RUN_TYPE), color = "black") +
   #scale_y_continuous(labels = percent, limits = c(-0.75, 0.5)) + 
-  scale_fill_manual(name = "Analysis Type", labels = c("'As Observed' Disparities in Adherence", "No Disparities in Adherence"), values = c("#1ECFD6", "#EDD170")) +
+  scale_fill_grey(start=0.3, end=0.8, guide = guide_legend(), name = "Analysis Type", labels = c("'As Observed' Disparities in Adherence", "No Disparities in Adherence")) +
   labs(x = "ART Scenario", y = "Incidence Rate in Full Population", title = "0.15 PrEP Levels") +
   geom_hline(yintercept = 0, linetype = "dashed") +
   theme(legend.position = "",
@@ -136,7 +136,7 @@ p1a<-ggplot() +
 p1b<-ggplot() +
   geom_boxplot(data = HIGH_PREP_SCENARIOS, aes(x = ART_COVERAGE.x, y = INCIDENCE_RATE, fill = RUN_TYPE), color = "black") +
   #scale_y_continuous(labels = percent, limits = c(-1, 0.5)) + 
-  scale_fill_manual(name = "Analysis Type", labels = c("'As Observed' Disparities in Adherence", "No Disparities in Adherence"), values = c("#1ECFD6", "#EDD170")) +
+  scale_fill_grey(start=0.3, end=0.8, guide = guide_legend(), name = "Analysis Type", labels = c("'As Observed' Disparities in Adherence", "No Disparities in Adherence")) +
   labs(x = "ART Scenario", y = "Incidence Rate in Full Population", title = "0.90 PrEP Levels") +
   geom_hline(yintercept = 0, linetype = "dashed") +
   theme(legend.position = "bottom",
@@ -159,12 +159,12 @@ grid.arrange(p1a, p1b, ncol = 1)
 
 
 p1c<-ggplot() +
-  geom_boxplot(data = LOW_PREP_SCENARIOS, aes(x = ART_COVERAGE.x, y = BLACK_RATE, fill = RUN_TYPE), color = "black") +
+  geom_boxplot(data = LOW_PREP_SCENARIOS, aes(x = ART_COVERAGE.x, y = BLACK_RATE, fill = RUN_TYPE), color = "black", alpha=1) +
   #scale_y_continuous(labels = percent, limits = c(-0.75, 0.5)) + 
-  scale_fill_manual(name = "Analysis Type", labels = c("'As Observed' Disparities in Adherence", "No Disparities in Adherence"), values = c("#1ECFD6", "#EDD170")) +
+  scale_fill_grey(start=0.6, end=0.9, guide = guide_legend(), name = "Analysis Type", labels = c("'As Observed' Disparities in Adherence", "No Disparities in Adherence")) +
   labs(x = "", y = "HIV incidence (per 100 person-years)", title = "Black/African American MSM (15% PrEP Use)") +
   scale_x_discrete(labels=c("Bas" = "Current", "90A" = "90-90-90", "95A" = "95-95-95")) + 
-  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_hline(yintercept = 0, linetype = "dashed", color="white") +
   theme(legend.position = "",
         legend.title = element_text(hjust = 0.5, face = "bold", size = 14),
         legend.text = element_text(size = 14),
@@ -174,19 +174,20 @@ p1c<-ggplot() +
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), 
         panel.background = element_blank(),
-        plot.title = element_text(size = 16, colour = "black", face = "bold", hjust=0.5),
+        plot.title = element_text(size = 14, colour = "black", face = "bold", hjust=0.5),
         axis.ticks = element_blank(),
         axis.line = element_line(color = "black"),
-        axis.title = element_text(size = 14, colour = "black", face = "bold"),
+        axis.title.y = element_text(size = 12, colour = "black", face = "bold"),
+        axis.title.x = element_text(size = 12, colour = "black", face = "bold", margin = margin(t = 10, r = 0, b = 0, l = 0)),
         axis.text = element_text(size = 14, colour = "black"))
 
 p1d<-ggplot() +
-  geom_boxplot(data = HIGH_PREP_SCENARIOS, aes(x = ART_COVERAGE.x, y = BLACK_RATE, fill = RUN_TYPE), color = "black") +
+  geom_boxplot(data = HIGH_PREP_SCENARIOS, aes(x = ART_COVERAGE.x, y = BLACK_RATE, fill = RUN_TYPE), color = "black", alpha=1) +
   #scale_y_continuous(labels = percent, limits = c(-1, 0.5)) + 
-  scale_fill_manual(name = "Analysis Type", labels = c("'As Observed' Disparities in PrEP Adherence", "No Disparities in PrEP Adherence"), values = c("#1ECFD6", "#EDD170")) +
+  scale_fill_grey(start=0.6, end=0.9, guide = guide_legend(), name = "Analysis Type", labels = c("'As Observed' Disparities in PrEP Adherence", "No Disparities in PrEP Adherence")) +
   labs(x = "Treatment Scenario", y = "HIV incidence (per 100 person-years)", title = "Black/African American MSM (90% PrEP Use)") +
   scale_x_discrete(labels=c("Bas" = "Current", "90A" = "90-90-90", "95A" = "95-95-95")) + 
-  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_hline(yintercept = 0, linetype = "dashed", color="white") +
   theme(legend.position = "bottom",
         legend.title = element_text(hjust = 0.5, face = "bold", size = 14),
         legend.text = element_text(size = 14),
@@ -196,25 +197,22 @@ p1d<-ggplot() +
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), 
         panel.background = element_blank(),
-        plot.title = element_text(size = 16, colour = "black", face = "bold", hjust = 0.5),
+        plot.title = element_text(size = 14, colour = "black", face = "bold", hjust = 0.5),
         axis.ticks = element_blank(),
         axis.line = element_line(color = "black"),
-        axis.title = element_text(size = 14, colour = "black", face = "bold"),
+        axis.title.y = element_text(size = 12, colour = "black", face = "bold"),
+        axis.title.x = element_text(size = 12, colour = "black", face = "bold", margin = margin(t = 10, r = 0, b = 0, l = 0)),
         axis.text = element_text(size = 14, colour = "black"))
 
-grid.arrange(p1c, p1d, ncol = 1)
-
-
-
-
+#grid.arrange(p1c, p1d, ncol = 1)
 
 p1e<-ggplot() +
-  geom_boxplot(data = LOW_PREP_SCENARIOS, aes(x = ART_COVERAGE.x, y = WHITE_RATE, fill = RUN_TYPE), color = "black") +
+  geom_boxplot(data = LOW_PREP_SCENARIOS, aes(x = ART_COVERAGE.x, y = WHITE_RATE, fill = RUN_TYPE), color = "black", alpha=1) +
   #scale_y_continuous(labels = percent, limits = c(-0.75, 0.5)) + 
-  scale_fill_manual(name = "Analysis Type", labels = c("'As Observed' Disparities in Adherence", "No Disparities in Adherence"), values = c("#1ECFD6", "#EDD170")) +
+  scale_fill_grey(start=0.6, end=0.9, guide = guide_legend(), name = "Analysis Type", labels = c("'As Observed' Disparities in Adherence", "No Disparities in Adherence")) +
   labs(x = "", y = "", title = "White MSM (15% PrEP Use)") +
   scale_x_discrete(labels=c("Bas" = "Current", "90A" = "90-90-90", "95A" = "95-95-95")) + 
-  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_hline(yintercept = 0, linetype = "dashed", color="white") +
   theme(legend.position = "",
         legend.title = element_text(hjust = 0.5, face = "bold", size = 14),
         legend.text = element_text(size = 14),
@@ -224,19 +222,20 @@ p1e<-ggplot() +
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), 
         panel.background = element_blank(),
-        plot.title = element_text(size = 16, colour = "black", face = "bold", hjust=0.5),
+        plot.title = element_text(size = 14, colour = "black", face = "bold", hjust=0.5),
         axis.ticks = element_blank(),
         axis.line = element_line(color = "black"),
-        axis.title = element_text(size = 14, colour = "black", face = "bold"),
+        axis.title.y = element_text(size = 12, colour = "black", face = "bold"),
+        axis.title.x = element_text(size = 12, colour = "black", face = "bold", margin = margin(t = 10, r = 0, b = 0, l = 0)),
         axis.text = element_text(size = 14, colour = "black"))
 
 p1f<-ggplot() +
-  geom_boxplot(data = HIGH_PREP_SCENARIOS, aes(x = ART_COVERAGE.x, y = WHITE_RATE, fill = RUN_TYPE), color = "black") +
+  geom_boxplot(data = HIGH_PREP_SCENARIOS, aes(x = ART_COVERAGE.x, y = WHITE_RATE, fill = RUN_TYPE), color = "black", alpha=1) +
   #scale_y_continuous(labels = percent, limits = c(-1, 0.5)) + 
-  scale_fill_manual(name = "Analysis Type", labels = c("'As Observed' Disparities in Adherence", "No Disparities in Adherence"), values = c("#1ECFD6", "#EDD170")) +
+  scale_fill_grey(start=0.6, end=0.9, guide = guide_legend(), name = "Analysis Type", labels = c("'As Observed' Disparities in Adherence", "No Disparities in Adherence")) +
   labs(x = "Treatment Scenario", y = "", title = "White MSM (90% PrEP Use)") +
   scale_x_discrete(labels=c("Bas" = "Current", "90A" = "90-90-90", "95A" = "95-95-95")) + 
-  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_hline(yintercept = 0, linetype = "dashed", color="white") +
   theme(legend.position = "bottom",
         legend.title = element_text(hjust = 0.5, face = "bold", size = 14),
         legend.text = element_text(size = 14),
@@ -246,26 +245,27 @@ p1f<-ggplot() +
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), 
         panel.background = element_blank(),
-        plot.title = element_text(size = 16, colour = "black", face = "bold", hjust = 0.5),
+        plot.title = element_text(size = 14, colour = "black", face = "bold", hjust = 0.5),
         axis.ticks = element_blank(),
         axis.line = element_line(color = "black"),
-        axis.title = element_text(size = 14, colour = "black", face = "bold"),
+        axis.title.y = element_text(size = 12, colour = "black", face = "bold"),
+        axis.title.x = element_text(size = 12, colour = "black", face = "bold", margin = margin(t = 10, r = 0, b = 0, l = 0)),
         axis.text = element_text(size = 14, colour = "black"))
 
-grid.arrange(p1c, p1e, p1d, p1f, ncol = 2)
+#grid.arrange(p1c, p1e, p1d, p1f, ncol = 2)
 
 legend <- get_legend(p1d)
 p1d <- p1d + theme(legend.position="none")
 p1f <- p1f + theme(legend.position="none")
 
 grid.arrange(arrangeGrob(p1c, left = textGrob("A)", x = unit(1, "npc"), 
-                                               y = unit(.95, "npc"),gp=gpar(fontsize=20))), 
+                                               y = unit(.95, "npc"),gp=gpar(fontsize=16))), 
              arrangeGrob(p1e, left = textGrob("B)", x = unit(1, "npc"), 
-                                               y = unit(.95, "npc"),gp=gpar(fontsize=20))),
+                                               y = unit(.95, "npc"),gp=gpar(fontsize=16))),
              arrangeGrob(p1d, left = textGrob("C)", x = unit(1, "npc"), 
-                                               y = unit(.95, "npc"),gp=gpar(fontsize=20))),
+                                               y = unit(.95, "npc"),gp=gpar(fontsize=16))),
              arrangeGrob(p1f, left = textGrob("D)", x = unit(1, "npc"), 
-                                              y = unit(.95, "npc"),gp=gpar(fontsize=20))),
+                                              y = unit(.95, "npc"),gp=gpar(fontsize=16))),
              legend, ncol=2, nrow=3,
              layout_matrix = rbind(c(1,2), c(3,4), c(5,5)),
              widths = c(2.7, 2.7), heights = c(2.5, 2.5, 0.4))
