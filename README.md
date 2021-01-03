@@ -1,4 +1,4 @@
-# Analysis for Atlanta Prevention Packages Manuscript
+# Analysis for Atlanta Added PrEP Manuscript
 
 This repo is made up of scripts used for analysis in a particular manuscript for the Marshall Research Group. This manuscript is an investigation on how different interventions and prevention efforts can work in tandem to mitigate the spread of HIV in Atlanta, Georgia.
 
