@@ -4,8 +4,8 @@ This repo is made up of scripts used for analysis in a particular manuscript for
 
 # Usage
 
-This repo is meant for version control and as a showcase of my analysis experience in a research setting. These scripts are extremely project specific are not currently designed for outside use. 
+This repo is meant for version control and as a showcase of my analysis experience in a research setting. These scripts are project specific are not currently designed for outside use. 
 
 # Authors and acknowledgement
 
-Aly Singleton, supported by the Marshall Research Group
+Alyson Singleton, supported by the Marshall Research Group
